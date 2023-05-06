@@ -5,8 +5,9 @@ import {
   NavigationContainer,
   useNavigationContainerRef,
 } from '@react-navigation/native';
-import { Home } from '../screens';
+import { Home, Map } from '../screens';
 import { ApplicationStackParamList } from '../types/navigation';
+import { useFlipper } from '@react-navigation/devtools';
 import styles from './styles';
 
 const Stack = createStackNavigator<ApplicationStackParamList>();
@@ -15,12 +16,15 @@ const Stack = createStackNavigator<ApplicationStackParamList>();
 const ApplicationNavigator = () => {
   const navigationRef = useNavigationContainerRef();
 
+  useFlipper(navigationRef);
+
   return (
     <SafeAreaView style={styles.container}>
       <NavigationContainer ref={navigationRef}>
         <StatusBar barStyle={'dark-content'} />
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="Map" component={Map} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>

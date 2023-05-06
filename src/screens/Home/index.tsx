@@ -1,19 +1,15 @@
 import React from 'react';
 import { FlatList, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
-import { useGetStoresQuery } from '../../services/api';
-import { Stores } from 'IpkList/src/types/stores';
+import { Stores } from '../../types/stores';
+import { useGetStoresQuery } from '../../services/module/store';
 
 type ItemProps = {
   item: Stores;
 };
 
-const Home = () => {
-  const { data: stores, isLoading } = useGetStoresQuery('');
-
-  console.log('isLoading', isLoading);
-
-  console.log('stores', stores);
+const Home = ({ navigation }: any) => {
+  const { data: stores, isLoading } = useGetStoresQuery();
 
   if (isLoading) {
     return (
@@ -23,12 +19,16 @@ const Home = () => {
     );
   }
 
+  const handlePress = (item: Stores) => {
+    navigation.navigate('Map', { itemid: item.id });
+  };
+
   const renderItem = ({ item }: ItemProps) => (
     <Card>
       <Card.Title title={item.name} />
       <Card.Content>{/* <Text>{item.description}</Text> */}</Card.Content>
       <Card.Actions>
-        <Button>Ver</Button>
+        <Button onPress={() => handlePress(item)}>Ver</Button>
       </Card.Actions>
     </Card>
   );

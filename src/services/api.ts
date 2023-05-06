@@ -25,11 +25,5 @@ const baseQueryWithInterceptor: BaseQueryFn<
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithInterceptor,
-  endpoints: builder => ({
-    getStores: builder.query({
-      query: () => '/stores',
-    }),
-  }),
+  endpoints: () => ({}),
 });
-
-export const { useGetStoresQuery } = api;
