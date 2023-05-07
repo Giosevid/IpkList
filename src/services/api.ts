@@ -5,10 +5,11 @@ import {
   fetchBaseQuery,
   FetchBaseQueryError,
 } from '@reduxjs/toolkit/query/react';
+import Config from 'react-native-config';
+import * as navigation from '../navigators/RootNavigation';
 
 const baseQuery = fetchBaseQuery({
-  // TODO: Pasar esto a el .env
-  baseUrl: 'https://ikp-mobile-challenge-backend.up.railway.app',
+  baseUrl: Config.API_URL,
 });
 
 const baseQueryWithInterceptor: BaseQueryFn<
@@ -17,13 +18,19 @@ const baseQueryWithInterceptor: BaseQueryFn<
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
-  if (result.error && result.error.status === 401) {
+  if (result.error && result.error.status === 403) {
+    navigation.navigate('OrderError');
+    return result;
+  }
+
+  if (result.error && result.error.status !== 200) {
+    navigation.navigate('Error');
+    return result;
   }
   return result;
 };
 
-export const api = createApi({
-  reducerPath: 'api',
+export const apiStore = createApi({
   baseQuery: baseQueryWithInterceptor,
   endpoints: () => ({}),
 });

@@ -1,45 +1,65 @@
 import React from 'react';
-import { FlatList, View } from 'react-native';
-import { Button, Card, Text } from 'react-native-paper';
-import { Stores } from '../../types/stores';
-import { useGetStoresQuery } from '../../services/module/store';
+import { View, FlatList, StyleSheet } from 'react-native';
+import { Text } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
+import { useGetStoresQuery } from 'IpkList/src/services/modules/storesList';
+import { Store } from 'IpkList/src/types/stores';
+import { ApplicationScreenProps } from 'IpkList/@types/navigation';
+import { Card } from 'IpkList/src/components';
+import { useTheme } from 'IpkList/src/hooks';
 
-type ItemProps = {
-  item: Stores;
+type Props = {
+  item: Store;
 };
 
-const Home = ({ navigation }: any) => {
-  const { data: stores, isLoading } = useGetStoresQuery();
+const FIVE_SECONDS = 5000;
 
-  if (isLoading) {
-    return (
-      <View>
-        <Text>Cargando...</Text>
-      </View>
-    );
-  }
+const Home = ({ navigation }: ApplicationScreenProps) => {
+  const { t } = useTranslation(['stores']);
 
-  const handlePress = (item: Stores) => {
-    navigation.navigate('Map', { itemid: item.id });
+  const { data: stores } = useGetStoresQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+    refetchOnReconnect: true,
+    refetchOnFocus: true,
+    pollingInterval: FIVE_SECONDS,
+  });
+
+  const { Images } = useTheme();
+
+  const handlePress = (item: Store) => {
+    navigation.navigate('Detail', { storeId: item.id });
   };
 
-  const renderItem = ({ item }: ItemProps) => (
-    <Card>
-      <Card.Title title={item.name} />
-      <Card.Content>{/* <Text>{item.description}</Text> */}</Card.Content>
-      <Card.Actions>
-        <Button onPress={() => handlePress(item)}>Ver</Button>
-      </Card.Actions>
-    </Card>
+  const renderItem = ({ item }: Props) => (
+    <Card
+      title={item.name}
+      onPress={() => handlePress(item)}
+      img={Images.lottie.store}
+    />
   );
 
   return (
-    <FlatList
-      data={stores}
-      renderItem={renderItem}
-      keyExtractor={item => item.id}
-    />
+    <View style={styles.container}>
+      <Text style={styles.title}>{t('stores:title')}</Text>
+      <FlatList data={stores} renderItem={renderItem} />
+    </View>
   );
 };
 
 export default Home;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#009387',
+    paddingHorizontal: 16,
+  },
+  title: {
+    color: '#05375a',
+    fontSize: 30,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    marginBottom: 20,
+    marginTop: 20,
+  },
+});

@@ -1,4 +1,4 @@
-export interface Stores {
+export interface Store {
   id: string;
   name: string;
   address: Address;
@@ -14,8 +14,8 @@ export interface Address {
 }
 
 export interface Coordinate {
-  lat: string;
-  lng: string;
+  lat: number;
+  lng: number;
 }
 
 export interface Schedule {
@@ -30,8 +30,13 @@ export interface ShippingMethod {
   description: string;
 }
 
+export enum Assigned {
+  true = 'true',
+  false = 'false',
+}
+
 export interface Task {
   id: string;
   description: string;
-  assigned: boolean;
+  assigned: Assigned;
 }

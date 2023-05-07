@@ -13,10 +13,11 @@ import {
 } from 'redux-persist';
 import { MMKV } from 'react-native-mmkv';
 
-import { api } from '../services/api';
+import { apiStore } from '../services/api';
+import { useDispatch } from 'react-redux';
 
 const reducers = combineReducers({
-  [api.reducerPath]: api.reducer,
+  [apiStore.reducerPath]: apiStore.reducer,
 });
 
 const storage = new MMKV();
@@ -38,7 +39,6 @@ export const reduxStorage: Storage = {
 const persistConfig = {
   key: 'root',
   storage: reduxStorage,
-  whitelist: ['theme', 'auth'],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);
@@ -50,7 +50,7 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(api.middleware);
+    }).concat(apiStore.middleware);
 
     if (__DEV__ && !process.env.JEST_WORKER_ID) {
       const createDebugger = require('redux-flipper').default;
@@ -64,5 +64,10 @@ const store = configureStore({
 const persistor = persistStore(store);
 
 setupListeners(store.dispatch);
+
+export type RootState = ReturnType<typeof reducers>;
+
+export type AppDispatch = typeof store.dispatch;
+export const useAppDispatch: () => AppDispatch = useDispatch;
 
 export { store, persistor };
