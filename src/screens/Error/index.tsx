@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignContent: 'center',
+    backgroundColor: '#009387',
   },
   card: {
     width: '80%',

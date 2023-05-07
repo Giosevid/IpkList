@@ -8,7 +8,8 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "prepare": "husky install .config/husky"
+    "prepare": "husky install .config/husky",
+    "android:build": "fastlane android build_dev"
   },
   "dependencies": {
     "@react-native-community/cli": "^11.2.1",
@@ -75,6 +76,7 @@
     "prettier": "^2.4.1",
     "react-test-renderer": "18.2.0",
     "redux-flipper": "^2.0.2",
+    "redux-mock-store": "^1.5.4",
     "typescript": "^5.0.4"
   },
   "jest": {

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 import { Text } from 'react-native-paper';
@@ -37,24 +37,34 @@ const Detail = ({ route, navigation }: ApplicationScreenProps) => {
 
   const { Images } = useTheme();
 
-  const selectImage = {
-    true: Images.lottie.success,
-    false: Images.lottie.bell,
-  };
-  const handlePress = (item: Task) => {
-    const body = {
-      storeId: findStoreById?.id!!,
-      taskId: item.id,
-    };
-    setCheckIn(body);
-  };
+  const selectImage = useMemo(
+    () => ({
+      true: Images.lottie.success,
+      false: Images.lottie.bell,
+    }),
+    [Images],
+  );
 
-  const renderItem = ({ item }: { item: Task }) => (
-    <Card
-      title={item.description}
-      onPress={() => handlePress(item)}
-      img={selectImage[item.assigned]}
-    />
+  const handlePress = useCallback(
+    (item: Task) => {
+      const body = {
+        storeId: findStoreById?.id!!,
+        taskId: item.id,
+      };
+      setCheckIn(body);
+    },
+    [setCheckIn, findStoreById],
+  );
+
+  const renderItem = useCallback(
+    ({ item }: { item: Task }) => (
+      <Card
+        title={item.description}
+        onPress={() => handlePress(item)}
+        img={selectImage[item.assigned]}
+      />
+    ),
+    [handlePress, selectImage],
   );
 
   return (
