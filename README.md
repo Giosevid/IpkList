@@ -35,4 +35,13 @@ Breve descripción de la app y de los problemas que resuelve.
      yarn android
      ```
 
+## Environment
+
+hay que creat un .env donde se guardaran las variables de entorno
+
+```
+GOOGLE_MAPS_API_KEY=API_KEY_GOOGLE
+API_URL=BASE_URL
+```
+
 
