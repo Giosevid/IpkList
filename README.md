@@ -35,7 +35,4 @@ Breve descripción de la app y de los problemas que resuelve.
      yarn android
      ```
 
-   ## Ejemplo
-
-   
 
